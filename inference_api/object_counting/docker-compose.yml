@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    container_name: inference-api
+    ports:
+      - "5000:5000"
+      - "5555:5555"
+    volumes:
+      - .:/usr/app
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t

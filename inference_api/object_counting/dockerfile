@@ -1,0 +1,42 @@
+# Usa uma versão específica do Python para reprodutibilidade
+FROM python:3.11.10-slim-bookworm
+
+# Configura variáveis de ambiente
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_BREAK_SYSTEM_PACKAGES=1
+
+# Instala pacotes necessários
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    python3-pip git zip unzip wget curl htop libgl1 libglib2.0-0 libpython3-dev gnupg g++ libusb-1.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Baixa e instala o Miniconda
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    bash /tmp/miniconda.sh -b -p /opt/miniconda && \
+    rm /tmp/miniconda.sh
+
+# Adiciona o Conda ao PATH
+ENV PATH="/opt/miniconda/bin:$PATH"
+
+# Atualiza Conda e cria o ambiente com Python e TensorFlow 
+RUN conda update -n base -c defaults conda && \
+    conda create -n devenv tensorflow -y
+
+# Define o diretório de trabalho
+WORKDIR /usr/app
+
+# Copia o arquivo de dependências e instala as bibliotecas no ambiente Conda
+COPY requirements.txt .
+RUN /opt/miniconda/envs/devenv/bin/pip install -r requirements.txt
+
+# Copia os arquivos do projeto
+COPY . .
+
+# Expõe a porta da API
+EXPOSE 5000
+
+# Ativa o ambiente Conda ao iniciar o container
+CMD ["/bin/bash", "-c", "source activate devenv && tail -f /dev/null"]
