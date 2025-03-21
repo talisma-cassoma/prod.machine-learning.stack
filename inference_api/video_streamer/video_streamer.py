@@ -51,4 +51,7 @@ def create_streamer(file, connect_to='tcp://0.0.0.0:5555', loop=True): #or run c
 
 
 if __name__ == '__main__':
-    streamer = create_streamer('cars.mp4')
+   
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
+    video_path = os.path.join(BASE_DIR, "cars.mp4")
+    streamer = create_streamer(video_path)
