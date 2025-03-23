@@ -1,0 +1,41 @@
+
+# Ignorar a pasta do ambiente virtual
+*venv/
+*env/
+
+*build/
+*dist/
+
+# Ignorar o arquivo do banco de dados
+*.db
+
+# Ignorar arquivos Python compilados
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*teste.py
+
+# Ignorar logs, temp e arquivos desnecessários
+*.json
+*.log
+*.tmp
+*.csv
+*.xlsx
+*.pdf
+
+# Ignorar configurações do editor/IDE
+#.vscode/
+.idea/
+
+# Ignorar arquivos de backup
+*.bak
+*.swp
+*.swo
+*node_modules/
+*.egg-info/
+
+# Exception for package.json and package-lock.json
+!package.json
+!package-lock.json
+!.vscode/settings.json
